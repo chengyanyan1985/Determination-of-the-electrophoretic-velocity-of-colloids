@@ -2,16 +2,17 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     <title>虚拟实验：胶体电泳速度的测定 | 氢氧化铁溶胶制备·纯化·辅助液配制·U型电泳装管·电泳操作</title>
     <!-- FontAwesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* ========== 全局样式 ========== */
+        /* ========== 全局样式 (移动优先 + 触摸优化) ========== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -20,8 +21,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            padding: 24px;
+            font-family: 'Segoe UI', Roboto, system-ui, 'Helvetica Neue', sans-serif;
+            padding: 16px;
         }
 
         .experiment-hub {
@@ -29,26 +30,26 @@
             width: 100%;
             background: rgba(255,255,255,0.5);
             backdrop-filter: blur(12px);
-            border-radius: 60px;
-            box-shadow: 25px 25px 50px #b0b8ca, -25px -25px 50px #ffffff;
+            border-radius: 40px;
+            box-shadow: 15px 15px 35px #b0b8ca, -15px -15px 35px #ffffff;
             overflow: hidden;
         }
 
-        /* 主标题样式 */
         .main-title {
             text-align: center;
-            padding: 28px 32px 12px 32px;
+            padding: 20px 20px 8px 20px;
             background: rgba(255,255,255,0.3);
             border-bottom: 1px solid rgba(184,92,42,0.3);
         }
         .main-title h1 {
-            font-size: 2.2rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: #1a3a52;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 16px;
-            letter-spacing: 2px;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
             background: linear-gradient(135deg, #1f4b6e, #b85c2a);
             background-clip: text;
             -webkit-background-clip: text;
@@ -58,43 +59,41 @@
         .main-title h1 i {
             color: #b85c2a;
             background: none;
-            -webkit-background-clip: unset;
-            background-clip: unset;
-            text-shadow: none;
         }
         .main-title p {
             color: #2c557a;
-            margin-top: 8px;
-            font-size: 1rem;
+            margin-top: 6px;
+            font-size: 0.85rem;
             font-weight: 500;
         }
 
-        /* 导航栏 */
         .nav-tabs {
             display: flex;
             background: #eef2f9dd;
             backdrop-filter: blur(8px);
-            padding: 8px 32px 0 32px;
-            gap: 16px;
+            padding: 8px 16px 0 16px;
+            gap: 8px;
             border-bottom: 2px solid #cbd6e6;
             flex-wrap: wrap;
+            justify-content: center;
         }
         .tab-btn {
             background: transparent;
             border: none;
-            font-size: 1.1rem;
+            font-size: 0.85rem;
             font-weight: 700;
-            padding: 12px 18px;
+            padding: 10px 14px;
             cursor: pointer;
             color: #2c4d6e;
             transition: 0.2s;
             border-radius: 40px 40px 0 0;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            touch-action: manipulation;
         }
         .tab-btn i {
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
         .tab-btn.active {
             background: #ffffffcc;
@@ -102,12 +101,12 @@
             box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
             border-bottom: 3px solid #b85c2a;
         }
-        .tab-btn:hover:not(.active) {
-            background: #d9e3f0b3;
+        .tab-btn:active {
+            transform: scale(0.96);
         }
 
         .module-container {
-            padding: 28px 32px 32px 32px;
+            padding: 20px 16px 28px 16px;
         }
         .experiment-module {
             display: none;
@@ -121,621 +120,146 @@
             to { opacity: 1; transform: translateY(0);}
         }
 
-        /* 公用辅助 */
-        .btn:active, .action-btn:active {
-            transform: translateY(4px);
+        /* 所有按钮增加触摸反馈 */
+        button, .btn, .action-btn, .tab-btn {
+            cursor: pointer;
+            touch-action: manipulation;
         }
-    </style>
+        button:active, .btn:active, .action-btn:active {
+            transform: translateY(2px);
+            transition: 0.02s linear;
+        }
 
-    <!-- 制备模块样式 (限定在.preparation-module内) -->
-    <style>
-        .preparation-module .steps-panel,
-        .preparation-module .bench-panel {
-            background: #f0f6ffdb;
-            border-radius: 42px;
-            padding: 28px 22px;
-            box-shadow: inset 0 2px 10px #ffffff, 0 12px 24px #0000001a;
+        /* 响应式布局：移动端单列，桌面双列 */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+            .experiment-hub {
+                border-radius: 28px;
+            }
+            .main-title h1 {
+                font-size: 1.3rem;
+            }
+            .tab-btn {
+                font-size: 0.75rem;
+                padding: 8px 12px;
+            }
+            .module-container {
+                padding: 16px 12px 20px;
+            }
+            .preparation-module .prep-inner > div,
+            .purification-module .pure-inner,
+            .auxiliary-module > div,
+            .electrophoresis-module > div,
+            .electrophoresis-op-module > div {
+                grid-template-columns: 1fr !important;
+                gap: 24px !important;
+            }
+            .preparation-module .beaker,
+            .purification-module .dialyzer,
+            .auxiliary-module .beaker {
+                max-width: 100%;
+                width: auto;
+                margin: 0 auto;
+            }
+            .electrophoresis-module .arm,
+            .electrophoresis-op-module .arm {
+                min-width: 95px;
+                width: 100%;
+                height: 260px;
+            }
+            .electrophoresis-module .bottom-connector {
+                width: 80%;
+            }
+            .electrophoresis-op-module .param-row {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .electrophoresis-op-module .operation-buttons button {
+                padding: 10px 18px;
+                font-size: 0.9rem;
+            }
+            .btn, .action-btn, .purification-module .btn, .auxiliary-module .btn {
+                padding: 12px 22px;
+                font-size: 0.9rem;
+            }
         }
-        .preparation-module .reagent-list {
-            background: #e4ecf9;
-            border-radius: 28px;
-            padding: 22px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 28px;
+        @media (min-width: 769px) {
+            .preparation-module .prep-inner > div,
+            .purification-module .pure-inner,
+            .auxiliary-module > div,
+            .electrophoresis-module > div,
+            .electrophoresis-op-module > div {
+                grid-template-columns: 1fr 1.2fr;
+                gap: 30px;
+            }
         }
-        .preparation-module .step-item {
-            background: #ffffffc2;
-            border-radius: 60px;
-            padding: 16px 25px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            font-size: 1.15rem;
-            font-weight: 500;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-        .preparation-module .step-item.active {
-            border-color: #b85c2a;
-            background: #ffeedd;
-        }
-        .preparation-module .step-item.completed {
-            background: #d1e0c5;
-            text-decoration: line-through 2px #2e7d32;
-        }
-        .preparation-module .step-index {
-            background: #1d4465;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            color: white;
-            font-weight: 700;
-        }
-        .preparation-module .beaker {
-            width: 280px;
-            height: 200px;
-            background: rgba(255,255,255,0.2);
-            border: 4px solid #6f809b;
-            border-radius: 0 0 80px 80px;
-            position: relative;
-            overflow: hidden;
-        }
-        .preparation-module .liquid {
-            position: absolute;
-            bottom: 0;
-            width: 96%;
-            height: 80%;
-            transition: background 0.4s;
-            border-radius: 0 0 60px 60px;
-        }
-        .preparation-module .dropper {
-            position: absolute;
-            top: -10px;
-            right: 30px;
-            width: 40px;
-            height: 90px;
-            background: #cdd9e9;
-            border: 3px solid #43648c;
-            border-radius: 40px 40px 20px 20px;
-            transform: rotate(10deg);
-            z-index: 10;
-        }
-        .preparation-module .drop {
-            position: absolute;
-            width: 16px;
-            height: 22px;
-            background: radial-gradient(circle at 30% 30%, #ffe793, #daba6b);
-            border-radius: 50%;
-            bottom: -30px;
-            left: 15px;
-            opacity: 0;
-            animation: dropFall 0.8s infinite;
-        }
-        @keyframes dropFall {
-            0% { bottom: -20px; opacity: 0.6; }
-            100% { bottom: 40px; opacity: 0; }
-        }
-        .preparation-module .action-btn {
-            background: #2a4e6e;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-            padding: 16px 34px;
-            border-radius: 60px;
-            cursor: pointer;
-            border: none;
-        }
+
+        /* 以下为各模块原有样式 (精简但完整保留功能所需) */
+        .preparation-module .steps-panel, .preparation-module .bench-panel { background: #f0f6ffdb; border-radius: 42px; padding: 28px 22px; box-shadow: inset 0 2px 10px #ffffff, 0 12px 24px #0000001a; }
+        .preparation-module .reagent-list { background: #e4ecf9; border-radius: 28px; padding: 22px; display: flex; flex-wrap: wrap; gap: 28px; }
+        .preparation-module .step-item { background: #ffffffc2; border-radius: 60px; padding: 16px 25px; display: flex; align-items: center; gap: 20px; font-size: 1.15rem; font-weight: 500; cursor: pointer; border: 2px solid transparent; }
+        .preparation-module .step-item.active { border-color: #b85c2a; background: #ffeedd; }
+        .preparation-module .step-item.completed { background: #d1e0c5; text-decoration: line-through 2px #2e7d32; }
+        .preparation-module .step-index { background: #1d4465; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: white; font-weight: 700; }
+        .preparation-module .beaker { width: 280px; height: 200px; background: rgba(255,255,255,0.2); border: 4px solid #6f809b; border-radius: 0 0 80px 80px; position: relative; overflow: hidden; margin: 0 auto; }
+        .preparation-module .liquid { position: absolute; bottom: 0; width: 96%; height: 80%; transition: background 0.4s; border-radius: 0 0 60px 60px; }
+        .preparation-module .dropper { position: absolute; top: -10px; right: 30px; width: 40px; height: 90px; background: #cdd9e9; border: 3px solid #43648c; border-radius: 40px 40px 20px 20px; transform: rotate(10deg); z-index: 10; }
+        .preparation-module .drop { position: absolute; width: 16px; height: 22px; background: radial-gradient(circle at 30% 30%, #ffe793, #daba6b); border-radius: 50%; bottom: -30px; left: 15px; opacity: 0; animation: dropFall 0.8s infinite; }
+        @keyframes dropFall { 0% { bottom: -20px; opacity: 0.6; } 100% { bottom: 40px; opacity: 0; } }
+        .preparation-module .action-btn { background: #2a4e6e; color: white; font-size: 1.2rem; font-weight: 600; padding: 16px 34px; border-radius: 60px; cursor: pointer; border: none; }
         .preparation-module .reset-btn { background: #7d6b5c; }
-    </style>
-
-    <!-- 纯化模块样式 (限定在.purification-module内) -->
-    <style>
-        .purification-module .dialyzer {
-            width: 360px;
-            height: 240px;
-            background: rgba(255,255,255,0.25);
-            border: 4px solid #65758b;
-            border-radius: 0 0 120px 120px;
-            position: relative;
-            overflow: hidden;
-        }
-        .purification-module .water {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 85%;
-            background: linear-gradient(145deg, #b3d4f0, #7fa9d0);
-        }
-        .purification-module .membrane-bag {
-            position: absolute;
-            bottom: 20px;
-            left: 30px;
-            width: 120px;
-            height: 160px;
-            background: rgba(220,190,150,0.4);
-            border: 3px dashed #a5794b;
-            border-radius: 60px 60px 30px 30px;
-        }
-        .purification-module .sol-inside {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(145deg, #c86f3a, #a34823);
-            border-radius: 60px 60px 30px 30px;
-        }
-        .purification-module .conductivity-meter {
-            background: #273d54;
-            border-radius: 60px;
-            padding: 18px 30px;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .purification-module .btn {
-            background: #1e4465;
-            color: white;
-            font-weight: 600;
-            padding: 14px 32px;
-            border-radius: 60px;
-            cursor: pointer;
-            border: none;
-        }
-        .purification-module .btn.reset { background: #7d695a; }
-        .ion-particle {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            opacity: 0.8;
-        }
+        .purification-module .dialyzer { width: 360px; height: 240px; background: rgba(255,255,255,0.25); border: 4px solid #65758b; border-radius: 0 0 120px 120px; position: relative; overflow: hidden; margin: 0 auto; }
+        .purification-module .water { position: absolute; bottom: 0; width: 100%; height: 85%; background: linear-gradient(145deg, #b3d4f0, #7fa9d0); }
+        .purification-module .membrane-bag { position: absolute; bottom: 20px; left: 30px; width: 120px; height: 160px; background: rgba(220,190,150,0.4); border: 3px dashed #a5794b; border-radius: 60px 60px 30px 30px; }
+        .purification-module .sol-inside { width: 100%; height: 100%; background: linear-gradient(145deg, #c86f3a, #a34823); border-radius: 60px 60px 30px 30px; }
+        .purification-module .conductivity-meter { background: #273d54; border-radius: 60px; padding: 18px 30px; color: white; display: flex; align-items: center; justify-content: space-between; }
+        .purification-module .btn { background: #1e4465; color: white; font-weight: 600; padding: 14px 32px; border-radius: 60px; cursor: pointer; border: none; }
+        .ion-particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; opacity: 0.8; }
         .inside-ion { background: #e6c34a; }
         .outside-ion { background: #c7c75a; opacity: 0.5; }
-    </style>
-
-    <!-- 辅助液配制模块样式 (限定在.auxiliary-module内) -->
-    <style>
-        .auxiliary-module .info-panel {
-            background: #eef4ffdb;
-            border-radius: 44px;
-            padding: 28px 22px;
-        }
-        .auxiliary-module .purpose {
-            background: #dae3f2;
-            border-radius: 32px;
-            padding: 22px;
-            border-left: 10px solid #b85c2a;
-        }
-        .auxiliary-module .reagents {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 18px;
-            background: #d3def0;
-            border-radius: 40px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-        .auxiliary-module .step-item {
-            background: white;
-            border-radius: 50px;
-            padding: 18px 24px;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            border: 2px solid transparent;
-        }
-        .auxiliary-module .step-item.active {
-            border-color: #b85c2a;
-            background: #ffe8da;
-        }
-        .auxiliary-module .step-item.completed {
-            background: #d1e0c0;
-            text-decoration: line-through 2px #1d7a21;
-        }
-        .auxiliary-module .step-index {
-            width: 42px;
-            height: 42px;
-            background: #215e8b;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.4rem;
-        }
-        .auxiliary-module .step-item.completed .step-index {
-            background: #2e7d32;
-        }
-        .auxiliary-module .meter {
-            background: #1b344c;
-            border-radius: 60px;
-            padding: 20px 28px;
-            color: white;
-        }
-        .auxiliary-module .beaker {
-            width: 200px;
-            height: 260px;
-            background: rgba(255,255,255,0.3);
-            border: 4px solid #5f748e;
-            border-radius: 0 0 100px 100px;
-            position: relative;
-            overflow: hidden;
-        }
-        .auxiliary-module .beaker .liquid {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 70%;
-            transition: background 0.2s;
-            border-radius: 0 0 90px 90px;
-        }
-        .auxiliary-module .match-indicator {
-            background: #c7d7ed;
-            border-radius: 60px;
-            padding: 18px 36px;
-            font-weight: 600;
-            text-align: center;
-            border: 3px solid #f6b83d;
-        }
-        .auxiliary-module .btn {
-            background: #215277;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-            padding: 14px 28px;
-            border-radius: 60px;
-            cursor: pointer;
-            border: none;
-        }
-        .auxiliary-module .btn.kcl { background: #a56336; }
-        .auxiliary-module .btn.water { background: #3d7e7e; }
-        .auxiliary-module .btn.reset { background: #7f6b5c; }
-    </style>
-
-    <!-- 电泳装管模块样式 (限定在.electrophoresis-module内) -->
-    <style>
-        .electrophoresis-module .step-list .step {
-            background: #ffffffc9;
-            border-radius: 60px;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid transparent;
-        }
-        .electrophoresis-module .step.active {
-            background: #fff0e0;
-            border-color: #b65c2e;
-        }
-        .electrophoresis-module .step.completed {
-            background: #d6e6cf;
-            color: #2c6e2c;
-            text-decoration: line-through 2px #2c6e2c;
-        }
-        .electrophoresis-module .step-index {
-            width: 36px;
-            height: 36px;
-            background: #2c6085;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        .electrophoresis-module .step.completed .step-index {
-            background: #2e7d32;
-        }
-        .electrophoresis-module .step-icon {
-            margin-left: auto;
-            font-size: 1.4rem;
-            color: #2e7d32;
-            display: none;
-        }
-        .electrophoresis-module .step.completed .step-icon {
-            display: inline-block;
-        }
-        .electrophoresis-module .arm {
-            width: 110px;
-            height: 300px;
-            background: #ccd9ec;
-            border-radius: 60px 60px 30px 30px;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid #bfcee4;
-        }
-        .electrophoresis-module .sol-layer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(145deg, #bc6f42, #9f4a26);
-            transition: height 0.2s ease;
-            border-radius: 30px 30px 0 0;
-            z-index: 2;
-        }
-        .electrophoresis-module .aux-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(145deg, #8bb3da, #6c93be);
-            transition: height 0.2s ease;
-            border-radius: 60px 60px 0 0;
-            z-index: 1;
-        }
-        .electrophoresis-module .piston {
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 70px;
-            height: 20px;
-            background: #8f7a63;
-            border-radius: 20px;
-            z-index: 10;
-            text-align: center;
-            font-size: 10px;
-            color: white;
-            line-height: 20px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .electrophoresis-module .bottom-connector {
-            width: 180px;
-            height: 28px;
-            background: #b3c4dc;
-            margin: -8px auto 0 auto;
-            border-radius: 0 0 60px 60px;
-        }
-        .electrophoresis-module .electrode-port {
-            position: absolute;
-            top: -18px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #ffd966;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        .electrophoresis-module .side-tube {
-            position: absolute;
-            left: -30px;
-            top: 60px;
-            width: 30px;
-            height: 18px;
-            background: #b0c0da;
-            border-radius: 10px 0 0 10px;
-            border: 2px solid #7e8da8;
-            border-right: none;
-            z-index: 5;
-        }
-        .electrophoresis-module .slider-container {
-            background: #d4e0f0;
-            border-radius: 32px;
-            padding: 16px;
-            margin-top: 16px;
-        }
-        .electrophoresis-module .interface-height {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1c557c;
-        }
-    </style>
-
-    <!-- 电泳操作模块样式 (限定在.electrophoresis-op-module内) -->
-    <style>
-        .electrophoresis-op-module .control-area {
-            background: #eef3ffdb;
-            border-radius: 44px;
-            padding: 28px 24px;
-            box-shadow: inset 0 2px 8px #fff, 0 12px 24px #00000020;
-        }
-        .electrophoresis-op-module .param-group {
-            background: #dee8f5;
-            border-radius: 36px;
-            padding: 20px;
-            margin-bottom: 28px;
-        }
-        .electrophoresis-op-module .param-row {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin: 14px 0;
-            flex-wrap: wrap;
-        }
-        .electrophoresis-op-module .param-row label {
-            width: 100px;
-            font-weight: 600;
-            color: #1a4a6e;
-        }
-        .electrophoresis-op-module .param-row input[type="number"] {
-            width: 100px;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 40px;
-            background: #f6faff;
-            text-align: center;
-            font-weight: 600;
-            box-shadow: inset 2px 2px 6px #b3bbcc, inset -2px -2px 4px #ffffff;
-        }
-        .electrophoresis-op-module .param-row input[type="range"] {
-            flex: 1;
-            min-width: 160px;
-        }
-        .electrophoresis-op-module .value-badge {
-            background: #2c6085;
-            color: white;
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-weight: 600;
-            min-width: 70px;
-            text-align: center;
-        }
-        .electrophoresis-op-module .operation-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin: 24px 0 20px;
-        }
-        .electrophoresis-op-module button {
-            background: #2c6085;
-            border: none;
-            color: white;
-            font-weight: 600;
-            padding: 12px 28px;
-            border-radius: 60px;
-            font-size: 1rem;
-            cursor: pointer;
-            box-shadow: 0 8px 14px #1d3e5a;
-            transition: 0.05s linear;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .electrophoresis-op-module button:active {
-            transform: translateY(3px);
-            box-shadow: 0 4px 10px #1d3e5a;
-        }
-        .electrophoresis-op-module button:disabled {
-            opacity: 0.5;
-            transform: none;
-            cursor: not-allowed;
-        }
-        .electrophoresis-op-module .stop-btn {
-            background: #b1421b;
-            box-shadow: 0 8px 14px #6e2a12;
-        }
-        .electrophoresis-op-module .reset-btn {
-            background: #7f6b5c;
-            box-shadow: 0 8px 14px #5c4c3f;
-        }
-        .electrophoresis-op-module .record-btn {
-            background: #2f7652;
-        }
-        .electrophoresis-op-module .timer-panel {
-            background: #cbdbe8;
-            border-radius: 32px;
-            padding: 16px;
-            text-align: center;
-            margin: 20px 0;
-        }
-        .electrophoresis-op-module .timer {
-            font-size: 2.5rem;
-            font-weight: 800;
-            font-family: monospace;
-            letter-spacing: 4px;
-            background: #0f1e2c;
-            color: #5ef074;
-            padding: 8px 20px;
-            border-radius: 60px;
-            display: inline-block;
-        }
-        .electrophoresis-op-module .result-card {
-            background: #f0f4fc;
-            border-radius: 28px;
-            padding: 18px;
-            text-align: center;
-            margin-top: 16px;
-        }
-        .electrophoresis-op-module .zeta-value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #1c557c;
-        }
-        .electrophoresis-op-module .electro-area {
-            background: #e1eaf8db;
-            border-radius: 48px;
-            padding: 24px 20px;
-            box-shadow: inset 0 2px 8px #fff, 0 16px 28px #00000028;
-        }
-        .electrophoresis-op-module .tube-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 30px;
-            margin: 20px 0;
-            position: relative;
-        }
-        .electrophoresis-op-module .arm {
-            width: 120px;
-            height: 300px;
-            background: #ccd9ec;
-            border-radius: 60px 60px 30px 30px;
-            box-shadow: inset -3px -3px 12px #fff, inset 3px 5px 15px #9fafc5, 0 10px 18px #00000030;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid #bfcee4;
-        }
-        .electrophoresis-op-module .sol-layer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(145deg, #bc6f42, #9f4a26);
-            transition: height 0.1s linear;
-            border-radius: 30px 30px 0 0;
-            z-index: 2;
-            box-shadow: inset 0 5px 8px #f5bc8f;
-        }
-        .electrophoresis-op-module .aux-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(145deg, #8bb3da, #6c93be);
-            transition: height 0.1s linear;
-            border-radius: 60px 60px 0 0;
-            z-index: 1;
-        }
-        .electrophoresis-op-module .electrode-mark {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #ffd966;
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            z-index: 5;
-            box-shadow: 0 2px 8px #b39b58;
-        }
-        .electrophoresis-op-module .bottom-info {
-            margin-top: 20px;
-            background: #dce4f0;
-            border-radius: 28px;
-            padding: 14px;
-            text-align: center;
-        }
-        .electrophoresis-op-module .live-distance {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #b45a2c;
-        }
+        .auxiliary-module .info-panel { background: #eef4ffdb; border-radius: 44px; padding: 28px 22px; }
+        .auxiliary-module .purpose { background: #dae3f2; border-radius: 32px; padding: 22px; border-left: 10px solid #b85c2a; }
+        .auxiliary-module .reagents { display: flex; flex-wrap: wrap; gap: 18px; background: #d3def0; border-radius: 40px; padding: 20px; margin: 20px 0; }
+        .auxiliary-module .step-item { background: white; border-radius: 50px; padding: 18px 24px; margin-bottom: 14px; display: flex; align-items: center; gap: 20px; border: 2px solid transparent; }
+        .auxiliary-module .step-item.active { border-color: #b85c2a; background: #ffe8da; }
+        .auxiliary-module .step-item.completed { background: #d1e0c0; text-decoration: line-through 2px #1d7a21; }
+        .auxiliary-module .step-index { width: 42px; height: 42px; background: #215e8b; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.4rem; }
+        .auxiliary-module .meter { background: #1b344c; border-radius: 60px; padding: 20px 28px; color: white; }
+        .auxiliary-module .beaker { width: 200px; height: 260px; background: rgba(255,255,255,0.3); border: 4px solid #5f748e; border-radius: 0 0 100px 100px; position: relative; overflow: hidden; margin: 10px auto; }
+        .auxiliary-module .beaker .liquid { position: absolute; bottom: 0; width: 100%; height: 70%; transition: background 0.2s; border-radius: 0 0 90px 90px; }
+        .auxiliary-module .match-indicator { background: #c7d7ed; border-radius: 60px; padding: 18px 36px; font-weight: 600; text-align: center; border: 3px solid #f6b83d; }
+        .auxiliary-module .btn { background: #215277; color: white; font-size: 1.2rem; font-weight: 600; padding: 14px 28px; border-radius: 60px; cursor: pointer; border: none; }
+        .electrophoresis-module .step-list .step { background: #ffffffc9; border-radius: 60px; padding: 12px 20px; display: flex; align-items: center; gap: 16px; font-weight: 600; cursor: pointer; border: 2px solid transparent; }
+        .electrophoresis-module .step.active { background: #fff0e0; border-color: #b65c2e; }
+        .electrophoresis-module .step.completed { background: #d6e6cf; color: #2c6e2c; text-decoration: line-through 2px #2c6e2c; }
+        .electrophoresis-module .step-index { width: 36px; height: 36px; background: #2c6085; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
+        .electrophoresis-module .arm { width: 110px; height: 300px; background: #ccd9ec; border-radius: 60px 60px 30px 30px; position: relative; overflow: hidden; border: 2px solid #bfcee4; display: inline-block; }
+        .electrophoresis-module .sol-layer { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(145deg, #bc6f42, #9f4a26); transition: height 0.2s ease; border-radius: 30px 30px 0 0; z-index: 2; }
+        .electrophoresis-module .aux-layer { position: absolute; top: 0; left: 0; width: 100%; background: linear-gradient(145deg, #8bb3da, #6c93be); transition: height 0.2s ease; border-radius: 60px 60px 0 0; z-index: 1; }
+        .electrophoresis-op-module .arm { width: 120px; height: 300px; background: #ccd9ec; border-radius: 60px 60px 30px 30px; position: relative; overflow: hidden; border: 2px solid #bfcee4; }
+        .electrophoresis-op-module .sol-layer { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(145deg, #bc6f42, #9f4a26); transition: height 0.1s linear; border-radius: 30px 30px 0 0; z-index: 2; }
+        .electrophoresis-op-module .aux-layer { position: absolute; top: 0; left: 0; width: 100%; background: linear-gradient(145deg, #8bb3da, #6c93be); transition: height 0.1s linear; border-radius: 60px 60px 0 0; z-index: 1; }
+        .electrophoresis-op-module .tube-container { display: flex; justify-content: center; align-items: flex-end; gap: 30px; margin: 20px 0; position: relative; flex-wrap: wrap; }
+        .electrophoresis-module .bottom-connector { width: 180px; height: 28px; background: #b3c4dc; margin: -8px auto 0 auto; border-radius: 0 0 60px 60px; }
+        .electrophoresis-module .electrode-port { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); background: #ffd966; padding: 2px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; white-space: nowrap; }
+        .electrophoresis-op-module .electrode-mark { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); background: #ffd966; padding: 4px 14px; border-radius: 30px; font-weight: bold; font-size: 0.8rem; white-space: nowrap; z-index: 5; }
+        .electrophoresis-op-module .control-area { background: #eef3ffdb; border-radius: 44px; padding: 28px 24px; }
+        .electrophoresis-op-module .operation-buttons button { background: #2c6085; border: none; color: white; font-weight: 600; padding: 12px 28px; border-radius: 60px; font-size: 1rem; cursor: pointer; }
+        .electrophoresis-op-module .stop-btn { background: #b1421b; }
+        .electrophoresis-op-module .reset-btn { background: #7f6b5c; }
+        .electrophoresis-op-module .timer { font-size: 2.5rem; font-weight: 800; font-family: monospace; background: #0f1e2c; color: #5ef074; padding: 8px 20px; border-radius: 60px; display: inline-block; }
+        .electrophoresis-op-module .result-card { background: #f0f4fc; border-radius: 28px; padding: 18px; text-align: center; }
+        .live-distance { font-size: 1.6rem; font-weight: 800; color: #b45a2c; }
     </style>
 </head>
 <body>
 <div class="experiment-hub">
-    <!-- 大标题 -->
     <div class="main-title">
         <h1><i class="fas fa-bolt"></i> 胶体电泳速度的测定 <i class="fas fa-charging-station"></i></h1>
         <p>氢氧化铁溶胶的制备 · 渗析纯化 · 辅助液配制 · U型电泳装管 · 界面移动法电泳</p>
     </div>
-
-    <!-- 导航栏 -->
     <div class="nav-tabs">
         <button class="tab-btn active" data-tab="prep"><i class="fas fa-flask"></i> ① 溶胶制备</button>
         <button class="tab-btn" data-tab="pure"><i class="fas fa-filter"></i> ② 渗析纯化</button>
@@ -747,115 +271,27 @@
     <div class="module-container">
         <!-- 模块1：制备实验 -->
         <div id="preparationModule" class="experiment-module active-module preparation-module">
-            <div class="prep-inner"><div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px;"><div class="steps-panel"><h2><i class="fas fa-droplet"></i> 试剂与仪器</h2><div class="reagent-list"><div class="reagent-item"><i class="fas fa-cube"></i> 0.5g FeCl₃</div><div class="reagent-item"><i class="fas fa-water"></i> 20 mL 蒸馏水</div><div class="reagent-item"><i class="fas fa-fire"></i> 200 mL 沸水</div></div><div class="step-progress"><div class="step-item" data-step="1"><span class="step-index">1</span>溶解 FeCl₃<i class="fas fa-check-circle" id="prepCheck1" style="display:none;"></i></div><div class="step-item" data-step="2"><span class="step-index">2</span>加热水至沸腾<i class="fas fa-check-circle" id="prepCheck2" style="display:none;"></i></div><div class="step-item" data-step="3"><span class="step-index">3</span>滴加 FeCl₃ 溶液<i class="fas fa-check-circle" id="prepCheck3" style="display:none;"></i></div><div class="step-item" data-step="4"><span class="step-index">4</span>煮沸 1~2 分钟<i class="fas fa-check-circle" id="prepCheck4" style="display:none;"></i></div><div class="step-item" data-step="5"><span class="step-index">5</span>Fe(OH)₃ 溶胶制成<i class="fas fa-check-circle" id="prepCheck5" style="display:none;"></i></div></div><div class="step-description" id="prepStepDesc"></div></div><div class="bench-panel"><div class="experiment-stage" style="background:#bcc9db70; border-radius:60px; padding:35px 15px; text-align:center;"><div class="beaker" id="prepBeaker"><div class="liquid" id="prepLiquid"></div><div class="bubbles" id="prepBubbles" style="opacity:0;"></div><div class="dropper" id="prepDropper" style="display:none;"><div class="drop" id="prepDrop"></div></div></div><div style="margin-top:20px;"><i class="fas fa-arrow-down"></i> 加热 / 反应中</div></div><div class="action-buttons"><button class="action-btn" id="prepPrevBtn" disabled>上一步</button><button class="action-btn" id="prepNextBtn">下一步</button><button class="action-btn reset-btn" id="prepResetBtn">重置</button></div><div style="text-align:center;"><button class="action-btn" id="prepDripBtn" style="background:#aa7c4f;">💧 滴加一滴</button></div></div></div></div>
+            <div class="prep-inner"><div style="display: grid; gap: 30px;"><div class="steps-panel"><h2><i class="fas fa-droplet"></i> 试剂与仪器</h2><div class="reagent-list"><div><i class="fas fa-cube"></i> 0.5g FeCl₃</div><div><i class="fas fa-water"></i> 20 mL 蒸馏水</div><div><i class="fas fa-fire"></i> 200 mL 沸水</div></div><div class="step-progress"><div class="step-item" data-step="1"><span class="step-index">1</span>溶解 FeCl₃<i class="fas fa-check-circle" id="prepCheck1" style="display:none;"></i></div><div class="step-item" data-step="2"><span class="step-index">2</span>加热水至沸腾<i class="fas fa-check-circle" id="prepCheck2" style="display:none;"></i></div><div class="step-item" data-step="3"><span class="step-index">3</span>滴加 FeCl₃ 溶液<i class="fas fa-check-circle" id="prepCheck3" style="display:none;"></i></div><div class="step-item" data-step="4"><span class="step-index">4</span>煮沸 1~2 分钟<i class="fas fa-check-circle" id="prepCheck4" style="display:none;"></i></div><div class="step-item" data-step="5"><span class="step-index">5</span>Fe(OH)₃ 溶胶制成<i class="fas fa-check-circle" id="prepCheck5" style="display:none;"></i></div></div><div id="prepStepDesc"></div></div><div class="bench-panel"><div class="experiment-stage" style="background:#bcc9db70; border-radius:60px; padding:35px 15px; text-align:center;"><div class="beaker" id="prepBeaker"><div class="liquid" id="prepLiquid"></div><div class="bubbles" id="prepBubbles" style="opacity:0;"></div><div class="dropper" id="prepDropper" style="display:none;"><div class="drop" id="prepDrop"></div></div></div><div style="margin-top:20px;"><i class="fas fa-arrow-down"></i> 加热 / 反应中</div></div><div class="action-buttons"><button class="action-btn" id="prepPrevBtn" disabled>上一步</button><button class="action-btn" id="prepNextBtn">下一步</button><button class="action-btn reset-btn" id="prepResetBtn">重置</button></div><div style="text-align:center;"><button class="action-btn" id="prepDripBtn" style="background:#aa7c4f;">💧 滴加一滴</button></div></div></div></div>
         </div>
 
-        <!-- 模块2：纯化实验（修改：初始电导率范围1500-2500，最终150-250，并保存纯化后值） -->
+        <!-- 模块2：渗析纯化 -->
         <div id="purificationModule" class="experiment-module purification-module">
-            <div class="pure-inner" style="display: grid; grid-template-columns: 1.1fr 1.2fr; gap:30px;">
-                <div class="left-panel" style="background:#eff4ffdb; border-radius:44px; padding:24px;">
-                    <div class="step-container">
-                        <div class="step-item" id="pure-step1"><span class="step-index">1</span>准备半透膜袋<span class="check-icon"><i class="fas fa-check-circle"></i></span></div>
-                        <div class="step-item" id="pure-step2"><span class="step-index">2</span>装入溶胶<span class="check-icon"><i class="fas fa-check-circle"></i></span></div>
-                        <div class="step-item" id="pure-step3"><span class="step-index">3</span>浸入蒸馏水<span class="check-icon"><i class="fas fa-check-circle"></i></span></div>
-                        <div class="step-item" id="pure-step4"><span class="step-index">4</span>换水10次<span class="check-icon"><i class="fas fa-check-circle"></i></span></div>
-                        <div class="step-item" id="pure-step5"><span class="step-index">5</span>纯化完成<span class="check-icon"><i class="fas fa-check-circle"></i></span></div>
-                    </div>
-                    <div class="description-box" id="pure-stepDesc"></div>
-                </div>
-                <div class="right-panel" style="background:#dde5f2db; border-radius:48px; padding:20px;">
-                    <div class="dialyzer" id="pure-dialyzer"><div class="water"></div><div class="membrane-bag"><div class="sol-inside"></div><div id="pure-insideIons"></div></div><div id="pure-outsideIons"></div></div>
-                    <div class="conductivity-meter"><span>电导率</span><span id="pure-condDisplay">1800</span><span>µS/cm</span></div>
-                    <div><span>换水次数:</span><span id="pure-exchangeCount">0</span>/10<div id="pure-progressBar" style="width:0%;background:#ffb347; height:8px; border-radius:8px;"></div></div>
-                    <div><button class="btn" id="pure-prevBtn" disabled>上一步</button><button class="btn" id="pure-nextBtn">下一步</button><button class="btn reset" id="pure-resetBtn">重置</button></div>
-                    <div><button class="btn" id="pure-exchangeBtn" disabled>换水一次</button></div>
-                </div>
-            </div>
+            <div class="pure-inner" style="display: grid; gap:30px;"><div class="left-panel" style="background:#eff4ffdb; border-radius:44px; padding:24px;"><div class="step-container"><div class="step-item" id="pure-step1"><span class="step-index">1</span>准备半透膜袋<span class="check-icon"><i class="fas fa-check-circle"></i></span></div><div class="step-item" id="pure-step2"><span class="step-index">2</span>装入溶胶<span class="check-icon"><i class="fas fa-check-circle"></i></span></div><div class="step-item" id="pure-step3"><span class="step-index">3</span>浸入蒸馏水<span class="check-icon"><i class="fas fa-check-circle"></i></span></div><div class="step-item" id="pure-step4"><span class="step-index">4</span>换水10次<span class="check-icon"><i class="fas fa-check-circle"></i></span></div><div class="step-item" id="pure-step5"><span class="step-index">5</span>纯化完成<span class="check-icon"><i class="fas fa-check-circle"></i></span></div></div><div id="pure-stepDesc"></div></div><div class="right-panel" style="background:#dde5f2db; border-radius:48px; padding:20px;"><div class="dialyzer" id="pure-dialyzer"><div class="water"></div><div class="membrane-bag"><div class="sol-inside"></div><div id="pure-insideIons"></div></div><div id="pure-outsideIons"></div></div><div class="conductivity-meter"><span>电导率</span><span id="pure-condDisplay">1800</span><span>µS/cm</span></div><div><span>换水次数:</span><span id="pure-exchangeCount">0</span>/10<div id="pure-progressBar" style="width:0%;background:#ffb347; height:8px; border-radius:8px;"></div></div><div><button class="btn" id="pure-prevBtn" disabled>上一步</button><button class="btn" id="pure-nextBtn">下一步</button><button class="btn reset" id="pure-resetBtn">重置</button></div><div><button class="btn" id="pure-exchangeBtn" disabled>换水一次</button></div></div></div>
         </div>
 
-        <!-- 模块3：辅助液配制（修改：测量溶胶时读取纯化后电导率） -->
+        <!-- 模块3：辅助液配制 -->
         <div id="auxiliaryModule" class="experiment-module auxiliary-module">
-            <div style="display: grid; grid-template-columns: 1.1fr 1.3fr; gap:30px;">
-                <div class="info-panel">
-                    <div class="purpose">实验目的：配制与纯化后溶胶电导率相同的辅助液</div>
-                    <div class="reagents"><div><i class="fas fa-cube"></i> 0.1M KCl</div><div><i class="fas fa-water"></i> 蒸馏水</div><div><i class="fas fa-chart-line"></i> 电导率仪</div></div>
-                    <div class="steps">
-                        <div class="step-item" id="aux-step1"><span class="step-index">1</span>测量溶胶电导率<span class="check-icon"><i class="fas fa-check-circle"></i></span></div>
-                        <div class="step-item" id="aux-step2"><span class="step-index">2</span>初始辅助液<span class="check-icon"><i class="fas fa-check-circle"></i></span></div>
-                        <div class="step-item" id="aux-step3"><span class="step-index">3</span>调节电导率<span class="check-icon"><i class="fas fa-check-circle"></i></span></div>
-                        <div class="step-item" id="aux-step4"><span class="step-index">4</span>匹配成功<span class="check-icon"><i class="fas fa-check-circle"></i></span></div>
-                    </div>
-                    <div id="aux-stepDesc"></div>
-                </div>
-                <div class="workspace" style="background:#e2eaf8db; border-radius:48px; padding:28px;">
-                    <div class="meter-panel"><div class="meter">溶胶: <span id="aux-solCondDisplay">---</span> µS/cm</div><div class="meter">辅助液: <span id="aux-auxCondDisplay">0.0</span> µS/cm</div></div>
-                    <div class="beakers"><div class="beaker"><div class="liquid" style="background:#c86f3a;"></div><span>溶胶</span></div><div class="beaker"><div class="liquid" id="aux-auxLiquid"></div><span>辅助液</span></div></div>
-                    <div class="controls"><button id="aux-measureBtn">测量溶胶</button><button id="aux-addKClBtn">+KCl</button><button id="aux-addWaterBtn">+水</button><button id="aux-resetBtn">重置</button></div>
-                    <div id="aux-matchIndicator" class="match-indicator">⚡ 未匹配</div>
-                </div>
-            </div>
+            <div style="display: grid; gap:30px;"><div class="info-panel"><div class="purpose">实验目的：配制与纯化后溶胶电导率相同的辅助液</div><div class="reagents"><div><i class="fas fa-cube"></i> 0.1M KCl</div><div><i class="fas fa-water"></i> 蒸馏水</div><div><i class="fas fa-chart-line"></i> 电导率仪</div></div><div class="steps"><div class="step-item" id="aux-step1"><span class="step-index">1</span>测量溶胶电导率<span class="check-icon"><i class="fas fa-check-circle"></i></span></div><div class="step-item" id="aux-step2"><span class="step-index">2</span>初始辅助液<span class="check-icon"><i class="fas fa-check-circle"></i></span></div><div class="step-item" id="aux-step3"><span class="step-index">3</span>调节电导率<span class="check-icon"><i class="fas fa-check-circle"></i></span></div><div class="step-item" id="aux-step4"><span class="step-index">4</span>匹配成功<span class="check-icon"><i class="fas fa-check-circle"></i></span></div></div><div id="aux-stepDesc"></div></div><div class="workspace" style="background:#e2eaf8db; border-radius:48px; padding:28px;"><div class="meter-panel"><div class="meter">溶胶: <span id="aux-solCondDisplay">---</span> µS/cm</div><div class="meter">辅助液: <span id="aux-auxCondDisplay">0.0</span> µS/cm</div></div><div class="beakers"><div class="beaker"><div class="liquid" style="background:#c86f3a;"></div><span>溶胶</span></div><div class="beaker"><div class="liquid" id="aux-auxLiquid"></div><span>辅助液</span></div></div><div class="controls"><button id="aux-measureBtn">测量溶胶</button><button id="aux-addKClBtn">+KCl</button><button id="aux-addWaterBtn">+水</button><button id="aux-resetBtn">重置</button></div><div id="aux-matchIndicator" class="match-indicator">⚡ 未匹配</div></div></div>
         </div>
 
-        <!-- 模块4：U型电泳仪装管操作 -->
+        <!-- 模块4：U型电泳装管 -->
         <div id="electrophoresisModule" class="experiment-module electrophoresis-module">
-            <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 28px;">
-                <div style="background:#eef3ffdb; border-radius: 40px; padding: 24px;">
-                    <div class="step-list">
-                        <div class="step" data-step="0"><span class="step-index">1</span>清洗·烘干·涂凡士林<span class="step-icon">✓</span></div>
-                        <div class="step" data-step="1"><span class="step-index">2</span>关闭活塞<span class="step-icon">✓</span></div>
-                        <div class="step" data-step="2"><span class="step-index">3</span>加入 Fe(OH)₃ 溶胶<span class="step-icon">✓</span></div>
-                        <div class="step" data-step="3"><span class="step-index">4</span>加入辅助液<span class="step-icon">✓</span></div>
-                        <div class="step" data-step="4"><span class="step-index">5</span>缓慢打开活塞，调节界面<span class="step-icon">✓</span></div>
-                        <div class="step" data-step="5"><span class="step-index">6</span>关闭活塞·记录高度<span class="step-icon">✓</span></div>
-                    </div>
-                    <div class="step-desc" id="elec-stepDesc" style="background:#dee8f5; border-radius:28px; padding:18px; margin:20px 0;"></div>
-                    <div class="control-buttons">
-                        <button id="elec-prevBtn" disabled><i class="fas fa-arrow-left"></i> 上一步</button>
-                        <button id="elec-nextBtn">下一步 <i class="fas fa-arrow-right"></i></button>
-                        <button id="elec-resetBtn" style="background:#7f6b5c;"><i class="fas fa-undo-alt"></i> 重置实验</button>
-                    </div>
-                    <div class="slider-container" id="elec-pistonSliderBox" style="display: none;">
-                        <div class="slider-label"><span>🔧 活塞开度</span><span id="elec-pistonValue">0%</span></div>
-                        <input type="range" id="elec-pistonSlider" min="0" max="100" value="0" step="1">
-                        <div style="font-size:0.8rem;">⬅️ 向右滑动 = 打开活塞，溶胶界面上升</div>
-                    </div>
-                    <div class="info-panel" style="background:#dce4f0; border-radius:28px; padding:16px; margin-top:20px; text-align:center;">
-                        <div>当前界面高度 (左臂溶胶高度)</div>
-                        <div class="interface-height" id="elec-heightDisplay">0.0 cm</div>
-                        <div>理想高度: 4.0 ~ 6.0 cm</div>
-                    </div>
-                </div>
-                <div style="background:#e1eaf8db; border-radius:48px; padding:24px;">
-                    <div style="text-align:center; font-weight:600;">U型电泳仪 (装管状态)</div>
-                    <div style="display: flex; justify-content: center; align-items: flex-end; gap: 30px; margin: 20px 0; position: relative;">
-                        <div class="arm" id="elec-leftArm"><div class="electrode-port">电极插口</div><div class="aux-layer" id="elec-leftAux" style="height: 240px;"></div><div class="sol-layer" id="elec-leftSol" style="height: 60px;"></div><div class="side-tube"></div></div>
-                        <div class="arm" id="elec-rightArm"><div class="electrode-port">电极插口</div><div class="aux-layer" id="elec-rightAux" style="height: 240px;"></div><div class="sol-layer" id="elec-rightSol" style="height: 60px;"></div><div class="side-tube"></div></div>
-                    </div>
-                    <div class="bottom-connector"><div class="piston">活塞</div></div>
-                    <div style="margin-top: 20px; background:#f4f7fd; border-radius:28px; padding:12px; text-align:center;"><i class="fas fa-info-circle"></i> 辅助液电导率已匹配溶胶，装填时避免气泡</div>
-                </div>
-            </div>
+            <div style="display: grid; gap:28px;"><div style="background:#eef3ffdb; border-radius: 40px; padding: 24px;"><div class="step-list"><div class="step" data-step="0"><span class="step-index">1</span>清洗·烘干·涂凡士林<span class="step-icon">✓</span></div><div class="step" data-step="1"><span class="step-index">2</span>关闭活塞<span class="step-icon">✓</span></div><div class="step" data-step="2"><span class="step-index">3</span>加入 Fe(OH)₃ 溶胶<span class="step-icon">✓</span></div><div class="step" data-step="3"><span class="step-index">4</span>加入辅助液<span class="step-icon">✓</span></div><div class="step" data-step="4"><span class="step-index">5</span>缓慢打开活塞，调节界面<span class="step-icon">✓</span></div><div class="step" data-step="5"><span class="step-index">6</span>关闭活塞·记录高度<span class="step-icon">✓</span></div></div><div id="elec-stepDesc" style="background:#dee8f5; border-radius:28px; padding:18px; margin:20px 0;"></div><div class="control-buttons"><button id="elec-prevBtn" disabled><i class="fas fa-arrow-left"></i> 上一步</button><button id="elec-nextBtn">下一步 <i class="fas fa-arrow-right"></i></button><button id="elec-resetBtn" style="background:#7f6b5c;"><i class="fas fa-undo-alt"></i> 重置实验</button></div><div class="slider-container" id="elec-pistonSliderBox" style="display: none;"><div class="slider-label"><span>🔧 活塞开度</span><span id="elec-pistonValue">0%</span></div><input type="range" id="elec-pistonSlider" min="0" max="100" value="0" step="1"><div style="font-size:0.8rem;">⬅️ 向右滑动 = 打开活塞，溶胶界面上升</div></div><div class="info-panel" style="background:#dce4f0; border-radius:28px; padding:16px; margin-top:20px; text-align:center;"><div>当前界面高度 (左臂溶胶高度)</div><div class="interface-height" id="elec-heightDisplay">0.0 cm</div><div>理想高度: 4.0 ~ 6.0 cm</div></div></div><div style="background:#e1eaf8db; border-radius:48px; padding:24px;"><div style="text-align:center; font-weight:600;">U型电泳仪 (装管状态)</div><div style="display: flex; justify-content: center; align-items: flex-end; gap: 30px; margin: 20px 0; position: relative; flex-wrap: wrap;"><div class="arm" id="elec-leftArm"><div class="electrode-port">电极插口</div><div class="aux-layer" id="elec-leftAux" style="height: 240px;"></div><div class="sol-layer" id="elec-leftSol" style="height: 60px;"></div></div><div class="arm" id="elec-rightArm"><div class="electrode-port">电极插口</div><div class="aux-layer" id="elec-rightAux" style="height: 240px;"></div><div class="sol-layer" id="elec-rightSol" style="height: 60px;"></div></div></div><div class="bottom-connector"><div class="piston">活塞</div></div><div style="margin-top: 20px; background:#f4f7fd; border-radius:28px; padding:12px; text-align:center;"><i class="fas fa-info-circle"></i> 辅助液电导率已匹配溶胶，装填时避免气泡</div></div></div>
         </div>
 
-        <!-- 模块5：电泳操作·界面移动法 -->
+        <!-- 模块5：电泳操作 -->
         <div id="electrophoresisOpModule" class="experiment-module electrophoresis-op-module">
-            <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 28px;">
-                <div class="control-area">
-                    <div class="param-group">
-                        <div class="param-row"><label>电压 <i>E</i> (V)</label><input type="number" id="elecOp-voltageNum" value="50" step="5" min="0" max="150"><input type="range" id="elecOp-voltageSlider" min="0" max="150" value="50" step="1"><span class="value-badge" id="elecOp-voltageShow">50 V</span></div>
-                        <div class="param-row"><label>极距 <i>L</i> (cm)</label><input type="number" id="elecOp-distanceNum" value="40" step="1" min="20" max="70"><input type="range" id="elecOp-distanceSlider" min="20" max="70" value="40" step="0.5"><span class="value-badge" id="elecOp-distanceShow">40.0 cm</span></div>
-                        <div class="param-row"><label>参考 ζ 电位</label><span style="background:#e9ecef; padding:6px 16px; border-radius:40px;">典型值 ~0.052 V</span></div>
-                    </div>
-                    <div class="operation-buttons"><button id="elecOp-startBtn"><i class="fas fa-play"></i> 开始电泳</button><button id="elecOp-stopBtn" class="stop-btn" disabled><i class="fas fa-stop"></i> 停止电泳</button><button id="elecOp-resetInterfaceBtn" class="reset-btn"><i class="fas fa-undo-alt"></i> 重置界面</button></div>
-                    <div class="timer-panel"><div>⏱️ 电泳时间</div><div class="timer" id="elecOp-timerDisplay">0.0 s</div></div>
-                    <div class="result-card"><div>📏 当前界面上升距离</div><div class="live-distance" id="elecOp-liveDistance">0.00 mm</div><div style="margin:12px 0;"><button id="elecOp-recordBtn" class="record-btn"><i class="fas fa-save"></i> 记录当前距离 & 计算 ζ</button></div><div>⚡ 电泳速度 u = <strong id="elecOp-speedVal">0.0000</strong> cm/s</div><div>ζ 电位 = <span id="elecOp-zetaVal" class="zeta-value">0.0000</span> V</div><div style="font-size:0.8rem;">(K=4, η=0.01005 P, D=81, 300²=90000)</div></div>
-                </div>
-                <div class="electro-area">
-                    <div style="text-align:center; font-weight:600;">U型电泳仪 (通电状态)</div>
-                    <div class="tube-container"><div class="arm" id="elecOp-leftArm"><div class="electrode-mark">阴极 (-)</div><div class="aux-layer" id="elecOp-leftAux" style="height: 240px;"></div><div class="sol-layer" id="elecOp-leftSol" style="height: 60px;"></div></div><div class="arm" id="elecOp-rightArm"><div class="electrode-mark">阳极 (+)</div><div class="aux-layer" id="elecOp-rightAux" style="height: 240px;"></div><div class="sol-layer" id="elecOp-rightSol" style="height: 60px;"></div></div></div>
-                    <div class="bottom-info"><i class="fas fa-charging-station"></i> 胶粒带正电 → 向阴极（左臂）移动，界面上升<br>辅助液与溶胶电导率匹配，界面清晰</div>
-                </div>
-            </div>
+            <div style="display: grid; gap:28px;"><div class="control-area"><div class="param-group"><div class="param-row"><label>电压 <i>E</i> (V)</label><input type="number" id="elecOp-voltageNum" value="50" step="5" min="0" max="150"><input type="range" id="elecOp-voltageSlider" min="0" max="150" value="50" step="1"><span class="value-badge" id="elecOp-voltageShow">50 V</span></div><div class="param-row"><label>极距 <i>L</i> (cm)</label><input type="number" id="elecOp-distanceNum" value="40" step="1" min="20" max="70"><input type="range" id="elecOp-distanceSlider" min="20" max="70" value="40" step="0.5"><span class="value-badge" id="elecOp-distanceShow">40.0 cm</span></div></div><div class="operation-buttons"><button id="elecOp-startBtn"><i class="fas fa-play"></i> 开始电泳</button><button id="elecOp-stopBtn" class="stop-btn" disabled><i class="fas fa-stop"></i> 停止电泳</button><button id="elecOp-resetInterfaceBtn" class="reset-btn"><i class="fas fa-undo-alt"></i> 重置界面</button></div><div class="timer-panel"><div>⏱️ 电泳时间</div><div class="timer" id="elecOp-timerDisplay">0.0 s</div></div><div class="result-card"><div>📏 当前界面上升距离</div><div class="live-distance" id="elecOp-liveDistance">0.00 mm</div><div style="margin:12px 0;"><button id="elecOp-recordBtn" class="record-btn"><i class="fas fa-save"></i> 记录当前距离 & 计算 ζ</button></div><div>⚡ 电泳速度 u = <strong id="elecOp-speedVal">0.0000</strong> cm/s</div><div>ζ 电位 = <span id="elecOp-zetaVal" class="zeta-value">0.0000</span> V</div></div></div><div class="electro-area"><div style="text-align:center; font-weight:600;">U型电泳仪 (通电状态)</div><div class="tube-container"><div class="arm" id="elecOp-leftArm"><div class="electrode-mark">阴极 (-)</div><div class="aux-layer" id="elecOp-leftAux" style="height: 240px;"></div><div class="sol-layer" id="elecOp-leftSol" style="height: 60px;"></div></div><div class="arm" id="elecOp-rightArm"><div class="electrode-mark">阳极 (+)</div><div class="aux-layer" id="elecOp-rightAux" style="height: 240px;"></div><div class="sol-layer" id="elecOp-rightSol" style="height: 60px;"></div></div></div><div class="bottom-info"><i class="fas fa-charging-station"></i> 胶粒带正电 → 向阴极（左臂）移动，界面上升</div></div></div>
         </div>
     </div>
 </div>
@@ -863,260 +299,15 @@
 <script>
     // ================= 全局共享状态 =================
     window.sharedState = {
-        installedSolHeightPx: 60,     // 装管高度
-        purifiedSolCond: null         // 纯化后溶胶电导率 (µS/cm)
+        installedSolHeightPx: 60,
+        purifiedSolCond: null
     };
 
-    // ================= 模块2: 渗析纯化 (修改：初始电导率范围1500-2500，最终150-250，保存纯化后值) =================
-    (function initPurification() {
-        let currentStep = 0, exchanges = 0;
-        const MAX_EX = 10;
-        // 随机初始电导率 (1500-2500)
-        let initialCond = Math.floor(Math.random() * (2500 - 1500 + 1) + 1500);
-        let currentCond = initialCond;
-        
-        const stepItems = [null,document.getElementById('pure-step1'),document.getElementById('pure-step2'),document.getElementById('pure-step3'),document.getElementById('pure-step4'),document.getElementById('pure-step5')];
-        const stepDesc = document.getElementById('pure-stepDesc');
-        const prevBtn = document.getElementById('pure-prevBtn');
-        const nextBtn = document.getElementById('pure-nextBtn');
-        const resetBtn = document.getElementById('pure-resetBtn');
-        const exchangeBtn = document.getElementById('pure-exchangeBtn');
-        const condDisplay = document.getElementById('pure-condDisplay');
-        const exchangeCountSpan = document.getElementById('pure-exchangeCount');
-        const progressBar = document.getElementById('pure-progressBar');
-        const insideIonsDiv = document.getElementById('pure-insideIons');
-        const outsideIonsDiv = document.getElementById('pure-outsideIons');
-        
-        function updateConductivity() {
-            if (exchanges === 0) {
-                currentCond = initialCond;
-            } else {
-                // 指数衰减，使10次后降至约 initialCond * 0.1
-                let decay = Math.exp(-0.23 * exchanges);
-                currentCond = initialCond * decay;
-                if (exchanges >= MAX_EX) {
-                    // 确保在150-250范围内
-                    currentCond = Math.min(250, Math.max(150, Math.round(currentCond)));
-                } else {
-                    currentCond = Math.round(currentCond);
-                }
-            }
-            condDisplay.innerText = currentCond;
-            // 当纯化完成时（exchanges达到MAX_EX 或 步骤5完成），保存电导率到全局
-            if (exchanges >= MAX_EX || (currentStep === 5 && exchanges === MAX_EX)) {
-                window.sharedState.purifiedSolCond = currentCond;
-            }
-        }
-        
-        function updateIons() {
-            insideIonsDiv.innerHTML = '';
-            outsideIonsDiv.innerHTML = '';
-            if (currentStep < 2) return;
-            let insideCount = Math.max(2, Math.round(20 * (1 - exchanges / MAX_EX * 0.9)));
-            let outsideCount = 0;
-            if (currentStep >= 3) {
-                if (exchanges === 0) outsideCount = 12;
-                else if (exchanges < 3) outsideCount = 10 - exchanges;
-                else if (exchanges < 7) outsideCount = 6;
-                else outsideCount = 3;
-            }
-            for (let i = 0; i < insideCount; i++) {
-                let ion = document.createElement('div');
-                ion.className = 'ion-particle inside-ion';
-                ion.style.left = (10 + Math.random() * 80) + '%';
-                ion.style.top = (10 + Math.random() * 70) + '%';
-                ion.style.position = 'absolute';
-                insideIonsDiv.appendChild(ion);
-            }
-            for (let i = 0; i < outsideCount; i++) {
-                let ion = document.createElement('div');
-                ion.className = 'ion-particle outside-ion';
-                ion.style.left = (5 + Math.random() * 90) + '%';
-                ion.style.bottom = (5 + Math.random() * 50) + '%';
-                ion.style.position = 'absolute';
-                outsideIonsDiv.appendChild(ion);
-            }
-        }
-        
-        function updateStepsStyle() {
-            for (let i = 1; i <= 5; i++) {
-                if (stepItems[i]) {
-                    stepItems[i].classList.remove('active', 'completed');
-                    if (i === currentStep) stepItems[i].classList.add('active');
-                    else if (i < currentStep) stepItems[i].classList.add('completed');
-                }
-            }
-            if (currentStep === 0) stepDesc.innerText = '准备：点击下一步开始渗析纯化。初始电导率随机1500-2500 µS/cm。';
-            else if (currentStep === 1) stepDesc.innerText = '步骤1：半透膜袋准备。';
-            else if (currentStep === 2) stepDesc.innerText = '步骤2：装入Fe(OH)₃溶胶。';
-            else if (currentStep === 3) stepDesc.innerText = '步骤3：浸入蒸馏水，渗析开始。';
-            else if (currentStep === 4) stepDesc.innerText = '步骤4：换水10次（每次点击"换水一次"），电导率逐渐下降。纯化后电导率应在150-250 µS/cm。';
-            else if (currentStep === 5) stepDesc.innerText = '✅ 纯化完成！溶胶电导率已降至' + currentCond + ' µS/cm，可作为辅助液配制的目标值。';
-            prevBtn.disabled = (currentStep <= 0);
-            nextBtn.disabled = (currentStep >= 5);
-            exchangeBtn.disabled = !(currentStep === 4 && exchanges < MAX_EX);
-        }
-        
-        function refreshUI() {
-            updateStepsStyle();
-            exchangeCountSpan.innerText = exchanges;
-            progressBar.style.width = (exchanges / MAX_EX * 100) + '%';
-            updateConductivity();
-            updateIons();
-        }
-        
-        function nextStep() {
-            if (currentStep < 5) {
-                if (currentStep === 4 && exchanges < MAX_EX) {
-                    alert('请先完成10次换水！');
-                    return;
-                }
-                currentStep++;
-                refreshUI();
-            }
-        }
-        
-        function prevStep() {
-            if (currentStep > 0) {
-                currentStep--;
-                refreshUI();
-            }
-        }
-        
-        function resetAll() {
-            currentStep = 0;
-            exchanges = 0;
-            // 重新随机初始电导率
-            initialCond = Math.floor(Math.random() * (2500 - 1500 + 1) + 1500);
-            currentCond = initialCond;
-            window.sharedState.purifiedSolCond = null; // 清除保存的纯化值
-            refreshUI();
-        }
-        
-        function exchangeWater() {
-            if (currentStep === 4 && exchanges < MAX_EX) {
-                exchanges++;
-                refreshUI();
-                if (exchanges >= MAX_EX) {
-                    exchangeBtn.disabled = true;
-                    stepDesc.innerText = '换水已完成10次！电导率已降至' + currentCond + ' µS/cm。可点击"下一步"完成纯化。';
-                }
-            }
-        }
-        
-        nextBtn.addEventListener('click', nextStep);
-        prevBtn.addEventListener('click', prevStep);
-        resetBtn.addEventListener('click', resetAll);
-        exchangeBtn.addEventListener('click', exchangeWater);
-        refreshUI();
-    })();
-
-    // ================= 模块3: 辅助液配制 (修改：测量溶胶时读取纯化后的电导率) =================
-    (function initAuxiliary() {
-        let currentStep = 0;
-        let solCond = 0;      // 目标电导率
-        let auxCond = 0;
-        const TOLERANCE = 10;
-        
-        const stepItems = [null, document.getElementById('aux-step1'), document.getElementById('aux-step2'), document.getElementById('aux-step3'), document.getElementById('aux-step4')];
-        const stepDesc = document.getElementById('aux-stepDesc');
-        const solCondDisplay = document.getElementById('aux-solCondDisplay');
-        const auxCondDisplay = document.getElementById('aux-auxCondDisplay');
-        const measureBtn = document.getElementById('aux-measureBtn');
-        const addKClBtn = document.getElementById('aux-addKClBtn');
-        const addWaterBtn = document.getElementById('aux-addWaterBtn');
-        const resetBtn = document.getElementById('aux-resetBtn');
-        const matchIndicator = document.getElementById('aux-matchIndicator');
-        const auxLiquid = document.getElementById('aux-auxLiquid');
-        
-        function updateSteps() {
-            for (let i = 1; i <= 4; i++) {
-                if (stepItems[i]) {
-                    stepItems[i].classList.remove('active', 'completed');
-                    if (i === currentStep) stepItems[i].classList.add('active');
-                    else if (i < currentStep) stepItems[i].classList.add('completed');
-                }
-            }
-            if (currentStep === 0) stepDesc.innerText = '请先完成渗析纯化实验，然后点击「测量溶胶」获取纯化后溶胶的电导率作为目标值。';
-            else if (currentStep === 1) stepDesc.innerText = `目标电导率 ${solCond} µS/cm，辅助液为蒸馏水。点击+KCl增加电导率，+水降低电导率。`;
-            else if (currentStep === 2) stepDesc.innerText = '调节辅助液电导率，使其接近目标值。';
-            else if (currentStep === 3) stepDesc.innerText = '微调至误差±10以内。';
-            else if (currentStep === 4) stepDesc.innerText = `✅ 匹配成功！辅助液电导率 ${auxCond} µS/cm 与溶胶 (${solCond} µS/cm) 一致。`;
-            
-            measureBtn.disabled = !(currentStep === 0);
-            const enableAdjust = (currentStep >= 1 && currentStep <= 3 && currentStep !== 4);
-            addKClBtn.disabled = !enableAdjust;
-            addWaterBtn.disabled = !enableAdjust || auxCond <= 0.1;
-        }
-        
-        function refreshDisplay() {
-            solCondDisplay.innerText = solCond > 0 ? solCond : '---';
-            auxCondDisplay.innerText = auxCond.toFixed(1);
-            if (auxCond < 50) auxLiquid.style.background = 'linear-gradient(145deg, #b3d4f0, #7fa9d0)';
-            else if (auxCond < 200) auxLiquid.style.background = 'linear-gradient(145deg, #9fc5e8, #6d9fd1)';
-            else auxLiquid.style.background = 'linear-gradient(145deg, #c2b0e0, #8f7fc0)';
-            
-            const diff = Math.abs(auxCond - solCond);
-            if (solCond > 0 && diff <= TOLERANCE && currentStep !== 4 && currentStep >= 1) {
-                currentStep = 4;
-                updateSteps();
-            } else if (solCond > 0 && diff > TOLERANCE && currentStep === 4) {
-                currentStep = 3;
-                updateSteps();
-            }
-            
-            if (solCond === 0) matchIndicator.innerText = '⚡ 未测量溶胶（请先完成纯化实验）';
-            else if (currentStep === 4) matchIndicator.innerHTML = `✅ 匹配成功！ 误差 ${diff.toFixed(1)} µS/cm`;
-            else matchIndicator.innerHTML = `⚡ 误差 ${diff.toFixed(1)} µS/cm (目标±10)`;
-            updateSteps();
-        }
-        
-        function measureSol() {
-            if (currentStep !== 0) return;
-            // 读取纯化模块保存的电导率
-            if (window.sharedState.purifiedSolCond !== null && window.sharedState.purifiedSolCond > 0) {
-                solCond = window.sharedState.purifiedSolCond;
-                auxCond = 0;
-                currentStep = 2;
-                refreshDisplay();
-            } else {
-                alert('请先完成渗析纯化实验，获得纯化后溶胶的电导率！');
-            }
-        }
-        
-        function addKCl() {
-            if (!(currentStep >= 1 && currentStep <= 3 && currentStep !== 4)) return;
-            auxCond = Math.min(auxCond + 15, 600);
-            refreshDisplay();
-        }
-        
-        function addWater() {
-            if (!(currentStep >= 1 && currentStep <= 3 && currentStep !== 4)) return;
-            if (auxCond >= 8) auxCond = Math.max(auxCond - 8, 0);
-            else auxCond = 0;
-            refreshDisplay();
-        }
-        
-        function resetAll() {
-            solCond = 0;
-            auxCond = 0;
-            currentStep = 0;
-            refreshDisplay();
-        }
-        
-        measureBtn.addEventListener('click', measureSol);
-        addKClBtn.addEventListener('click', addKCl);
-        addWaterBtn.addEventListener('click', addWater);
-        resetBtn.addEventListener('click', resetAll);
-        refreshDisplay();
-    })();
-
-    // ================= 模块1: 制备实验 (保持不变) =================
+    // ================= 模块1: 制备实验 =================
     (function initPreparation() {
         let currentStep = 0, dripCount = 0;
         const stepItems = document.querySelectorAll('#preparationModule .step-item');
         const liquid = document.getElementById('prepLiquid');
-        const liquidLabel = document.getElementById('prepLiquidLabel');
         const bubbles = document.getElementById('prepBubbles');
         const dropper = document.getElementById('prepDropper');
         const drop = document.getElementById('prepDrop');
@@ -1132,12 +323,12 @@
         function updateUI(step) {
             stepItems.forEach((item, idx) => { const sn = idx+1; item.classList.remove('active','completed'); if(sn===step) item.classList.add('active'); else if(sn<step) item.classList.add('completed'); });
             for(let i=1;i<=5;i++) if(checkIcons[i]) checkIcons[i].style.display = (i < step) ? 'inline-block' : 'none';
-            if(step===0) { liquid.style.background = COLOR_WATER; if(liquidLabel) liquidLabel.innerText='去离子水'; bubbles.style.opacity='0'; dropper.style.display='none'; stepDesc.innerText='准备：将0.5g FeCl₃溶于20 mL蒸馏水，点击下一步。'; }
-            else if(step===1) { liquid.style.background = COLOR_FECL3; if(liquidLabel) liquidLabel.innerText='FeCl₃溶液'; stepDesc.innerText='步骤1：FeCl₃溶解得到黄色溶液。'; }
-            else if(step===2) { liquid.style.background = COLOR_WATER; if(liquidLabel) liquidLabel.innerText='沸水'; bubbles.style.opacity='0.5'; stepDesc.innerText='步骤2：加热至沸腾。'; }
-            else if(step===3) { liquid.style.background = 'linear-gradient(145deg, #e9b864, #c57c3a)'; if(liquidLabel) liquidLabel.innerText='滴加中'; dropper.style.display='block'; stepDesc.innerText='步骤3：滴加FeCl₃溶液。点击滴加按钮。'; dripCount=0; }
-            else if(step===4) { liquid.style.background = COLOR_FEOH3; if(liquidLabel) liquidLabel.innerText='溶胶煮沸'; bubbles.style.opacity='0.7'; dropper.style.display='none'; stepDesc.innerText='步骤4：煮沸1~2分钟。'; }
-            else if(step===5) { liquid.style.background = COLOR_FEOH3; if(liquidLabel) liquidLabel.innerText='Fe(OH)₃溶胶'; bubbles.style.opacity='0'; stepDesc.innerText='✅ 制备完成。'; }
+            if(step===0) { liquid.style.background = COLOR_WATER; bubbles.style.opacity='0'; dropper.style.display='none'; stepDesc.innerText='准备：将0.5g FeCl₃溶于20 mL蒸馏水，点击下一步。'; }
+            else if(step===1) { liquid.style.background = COLOR_FECL3; stepDesc.innerText='步骤1：FeCl₃溶解得到黄色溶液。'; }
+            else if(step===2) { liquid.style.background = COLOR_WATER; bubbles.style.opacity='0.5'; stepDesc.innerText='步骤2：加热至沸腾。'; }
+            else if(step===3) { liquid.style.background = 'linear-gradient(145deg, #e9b864, #c57c3a)'; dropper.style.display='block'; stepDesc.innerText='步骤3：滴加FeCl₃溶液。点击滴加按钮。'; dripCount=0; }
+            else if(step===4) { liquid.style.background = COLOR_FEOH3; bubbles.style.opacity='0.7'; dropper.style.display='none'; stepDesc.innerText='步骤4：煮沸1~2分钟。'; }
+            else if(step===5) { liquid.style.background = COLOR_FEOH3; bubbles.style.opacity='0'; stepDesc.innerText='✅ 制备完成。'; }
             prevBtn.disabled = (step<=0); nextBtn.disabled = (step>=5); dripBtn.disabled = (step!==3);
         }
         function nextStep() { if(currentStep<5) { currentStep++; updateUI(currentStep); } }
@@ -1148,7 +339,105 @@
         updateUI(0);
     })();
 
-    // ================= 模块4: U型电泳装管 (关联高度) =================
+    // ================= 模块2: 渗析纯化 =================
+    (function initPurification() {
+        let currentStep = 0, exchanges = 0;
+        let initialCond = Math.floor(Math.random() * (2500 - 1500 + 1) + 1500);
+        let currentCond = initialCond;
+        const stepItems = [null,document.getElementById('pure-step1'),document.getElementById('pure-step2'),document.getElementById('pure-step3'),document.getElementById('pure-step4'),document.getElementById('pure-step5')];
+        const stepDesc = document.getElementById('pure-stepDesc');
+        const prevBtn = document.getElementById('pure-prevBtn');
+        const nextBtn = document.getElementById('pure-nextBtn');
+        const resetBtn = document.getElementById('pure-resetBtn');
+        const exchangeBtn = document.getElementById('pure-exchangeBtn');
+        const condDisplay = document.getElementById('pure-condDisplay');
+        const exchangeCountSpan = document.getElementById('pure-exchangeCount');
+        const progressBar = document.getElementById('pure-progressBar');
+        const insideIonsDiv = document.getElementById('pure-insideIons');
+        const outsideIonsDiv = document.getElementById('pure-outsideIons');
+        function updateConductivity() {
+            if (exchanges === 0) currentCond = initialCond;
+            else { let decay = Math.exp(-0.23 * exchanges); currentCond = initialCond * decay; if (exchanges >= 10) currentCond = Math.min(250, Math.max(150, Math.round(currentCond))); else currentCond = Math.round(currentCond); }
+            condDisplay.innerText = currentCond;
+            if (exchanges >= 10 || (currentStep === 5 && exchanges === 10)) window.sharedState.purifiedSolCond = currentCond;
+        }
+        function updateIons() { insideIonsDiv.innerHTML=''; outsideIonsDiv.innerHTML=''; if(currentStep<2) return; let insideCount = Math.max(2, Math.round(20 * (1 - exchanges / 10 * 0.9))); for(let i=0;i<insideCount;i++){ let ion=document.createElement('div'); ion.className='ion-particle inside-ion'; ion.style.left=(10+Math.random()*80)+'%'; ion.style.top=(10+Math.random()*70)+'%'; ion.style.position='absolute'; insideIonsDiv.appendChild(ion); } if(currentStep>=3){ let outCnt=exchanges<3?10-exchanges:exchanges<7?6:3; for(let i=0;i<outCnt;i++){ let ion=document.createElement('div'); ion.className='ion-particle outside-ion'; ion.style.left=(5+Math.random()*90)+'%'; ion.style.bottom=(5+Math.random()*50)+'%'; ion.style.position='absolute'; outsideIonsDiv.appendChild(ion); } } }
+        function updateStepsStyle() {
+            for(let i=1;i<=5;i++) if(stepItems[i]){ stepItems[i].classList.remove('active','completed'); if(i===currentStep) stepItems[i].classList.add('active'); else if(i<currentStep) stepItems[i].classList.add('completed'); }
+            if(currentStep===0) stepDesc.innerText='准备：点击下一步开始渗析纯化。初始电导率随机1500-2500 µS/cm。';
+            else if(currentStep===1) stepDesc.innerText='步骤1：半透膜袋准备。';
+            else if(currentStep===2) stepDesc.innerText='步骤2：装入Fe(OH)₃溶胶。';
+            else if(currentStep===3) stepDesc.innerText='步骤3：浸入蒸馏水，渗析开始。';
+            else if(currentStep===4) stepDesc.innerText='步骤4：换水10次（每次点击"换水一次"），电导率逐渐下降。纯化后电导率应在150-250 µS/cm。';
+            else if(currentStep===5) stepDesc.innerText='✅ 纯化完成！溶胶电导率已降至'+currentCond+' µS/cm，可作为辅助液配制的目标值。';
+            prevBtn.disabled=(currentStep<=0); nextBtn.disabled=(currentStep>=5); exchangeBtn.disabled=!(currentStep===4 && exchanges<10);
+        }
+        function refreshUI(){ updateStepsStyle(); exchangeCountSpan.innerText=exchanges; progressBar.style.width=(exchanges/10*100)+'%'; updateConductivity(); updateIons(); }
+        function nextStep(){ if(currentStep<5){ if(currentStep===4 && exchanges<10){ alert('请先完成10次换水！'); return; } currentStep++; refreshUI(); } }
+        function prevStep(){ if(currentStep>0){ currentStep--; refreshUI(); } }
+        function resetAll(){ currentStep=0; exchanges=0; initialCond=Math.floor(Math.random()*(2500-1500+1)+1500); currentCond=initialCond; window.sharedState.purifiedSolCond=null; refreshUI(); }
+        function exchangeWater(){ if(currentStep===4 && exchanges<10){ exchanges++; refreshUI(); if(exchanges>=10) exchangeBtn.disabled=true; } }
+        nextBtn.addEventListener('click',nextStep); prevBtn.addEventListener('click',prevStep); resetBtn.addEventListener('click',resetAll); exchangeBtn.addEventListener('click',exchangeWater);
+        refreshUI();
+    })();
+
+    // ================= 模块3: 辅助液配制 =================
+    (function initAuxiliary() {
+        let currentStep = 0, solCond = 0, auxCond = 0;
+        const TOLERANCE = 10;
+        const stepItems = [null, document.getElementById('aux-step1'), document.getElementById('aux-step2'), document.getElementById('aux-step3'), document.getElementById('aux-step4')];
+        const stepDesc = document.getElementById('aux-stepDesc');
+        const solCondDisplay = document.getElementById('aux-solCondDisplay');
+        const auxCondDisplay = document.getElementById('aux-auxCondDisplay');
+        const measureBtn = document.getElementById('aux-measureBtn');
+        const addKClBtn = document.getElementById('aux-addKClBtn');
+        const addWaterBtn = document.getElementById('aux-addWaterBtn');
+        const resetBtn = document.getElementById('aux-resetBtn');
+        const matchIndicator = document.getElementById('aux-matchIndicator');
+        const auxLiquid = document.getElementById('aux-auxLiquid');
+        function updateSteps() {
+            for(let i=1;i<=4;i++) if(stepItems[i]){ stepItems[i].classList.remove('active','completed'); if(i===currentStep) stepItems[i].classList.add('active'); else if(i<currentStep) stepItems[i].classList.add('completed'); }
+            if(currentStep===0) stepDesc.innerText='请先完成渗析纯化实验，然后点击「测量溶胶」获取纯化后溶胶的电导率作为目标值。';
+            else if(currentStep===1) stepDesc.innerText=`目标电导率 ${solCond} µS/cm，辅助液为蒸馏水。点击+KCl增加电导率，+水降低电导率。`;
+            else if(currentStep===2) stepDesc.innerText='调节辅助液电导率，使其接近目标值。';
+            else if(currentStep===3) stepDesc.innerText='微调至误差±10以内。';
+            else if(currentStep===4) stepDesc.innerText=`✅ 匹配成功！辅助液电导率 ${auxCond} µS/cm 与溶胶 (${solCond} µS/cm) 一致。`;
+            measureBtn.disabled = !(currentStep===0);
+            const enableAdjust = (currentStep>=1 && currentStep<=3 && currentStep!==4);
+            addKClBtn.disabled = !enableAdjust;
+            addWaterBtn.disabled = !enableAdjust || auxCond<=0.1;
+        }
+        function refreshDisplay() {
+            solCondDisplay.innerText = solCond>0?solCond:'---';
+            auxCondDisplay.innerText = auxCond.toFixed(1);
+            if(auxCond<50) auxLiquid.style.background='linear-gradient(145deg, #b3d4f0, #7fa9d0)';
+            else if(auxCond<200) auxLiquid.style.background='linear-gradient(145deg, #9fc5e8, #6d9fd1)';
+            else auxLiquid.style.background='linear-gradient(145deg, #c2b0e0, #8f7fc0)';
+            const diff = Math.abs(auxCond - solCond);
+            if(solCond>0 && diff<=TOLERANCE && currentStep!==4 && currentStep>=1){ currentStep=4; updateSteps(); }
+            else if(solCond>0 && diff>TOLERANCE && currentStep===4){ currentStep=3; updateSteps(); }
+            if(solCond===0) matchIndicator.innerText='⚡ 未测量溶胶（请先完成纯化实验）';
+            else if(currentStep===4) matchIndicator.innerHTML=`✅ 匹配成功！ 误差 ${diff.toFixed(1)} µS/cm`;
+            else matchIndicator.innerHTML=`⚡ 误差 ${diff.toFixed(1)} µS/cm (目标±10)`;
+            updateSteps();
+        }
+        function measureSol() {
+            if(currentStep!==0) return;
+            if(window.sharedState.purifiedSolCond !== null && window.sharedState.purifiedSolCond>0){
+                solCond = window.sharedState.purifiedSolCond;
+                auxCond = 0;
+                currentStep = 2;
+                refreshDisplay();
+            } else alert('请先完成渗析纯化实验，获得纯化后溶胶的电导率！');
+        }
+        function addKCl(){ if(currentStep>=1 && currentStep<=3 && currentStep!==4){ auxCond = Math.min(auxCond+15,600); refreshDisplay(); } }
+        function addWater(){ if(currentStep>=1 && currentStep<=3 && currentStep!==4 && auxCond>=8){ auxCond = Math.max(auxCond-8,0); refreshDisplay(); } }
+        function resetAll(){ solCond=0; auxCond=0; currentStep=0; refreshDisplay(); }
+        measureBtn.addEventListener('click',measureSol); addKClBtn.addEventListener('click',addKCl); addWaterBtn.addEventListener('click',addWater); resetBtn.addEventListener('click',resetAll);
+        refreshDisplay();
+    })();
+
+    // ================= 模块4: U型电泳装管 =================
     (function initElectrophoresis() {
         let currentStep = 0, pistonOpen = 0, baseSolPx = 0, currentSolPx = 0;
         const MAX_HEIGHT_PX = 300, CM_PER_PX = 10 / MAX_HEIGHT_PX;
@@ -1165,7 +454,6 @@
         const leftAux = document.getElementById('elec-leftAux');
         const rightSol = document.getElementById('elec-rightSol');
         const rightAux = document.getElementById('elec-rightAux');
-        
         function updateTubeHeights(solHeightPx) {
             solHeightPx = Math.min(MAX_HEIGHT_PX, Math.max(0, solHeightPx));
             let auxHeight = MAX_HEIGHT_PX - solHeightPx;
@@ -1176,95 +464,32 @@
             currentSolPx = solHeightPx;
             heightDisplay.innerText = (solHeightPx * CM_PER_PX).toFixed(1) + ' cm';
         }
-        
-        function saveInstalledHeight() {
-            if (currentStep === 5 && currentSolPx > 0) {
-                window.sharedState.installedSolHeightPx = currentSolPx;
-                if (document.getElementById('electrophoresisOpModule').classList.contains('active-module') && window.elecOpResetInterface) {
-                    window.elecOpResetInterface();
-                }
-            }
-        }
-        
+        function saveInstalledHeight() { if(currentStep===5 && currentSolPx>0) window.sharedState.installedSolHeightPx = currentSolPx; }
         function updateStepUI() {
-            stepDivs.forEach((div, idx) => {
-                div.classList.remove('active', 'completed');
-                if (idx === currentStep) div.classList.add('active');
-                else if (idx < currentStep) div.classList.add('completed');
-            });
-            const descriptions = [
-                "① 用蒸馏水清洗U型管，烘干。在活塞处涂抹薄层凡士林。",
-                "② 旋转活塞至关闭状态。",
-                "③ 用滴管从侧管缓慢加入Fe(OH)₃溶胶，避免气泡。",
-                "④ 从U型管上口沿壁加入辅助液（电导率已匹配）。",
-                "⑤ 缓慢打开活塞（向右滑动下方滑块），调节界面高度至4~6 cm。",
-                "⑥ 关闭活塞，记录界面高度。装管完成，可插入电极进行电泳。"
-            ];
+            stepDivs.forEach((div, idx) => { div.classList.remove('active','completed'); if(idx===currentStep) div.classList.add('active'); else if(idx<currentStep) div.classList.add('completed'); });
+            const descriptions = ["① 清洗U型管，烘干，活塞涂凡士林。","② 旋转活塞至关闭状态。","③ 用滴管从侧管缓慢加入Fe(OH)₃溶胶。","④ 从U型管上口沿壁加入辅助液（电导率已匹配）。","⑤ 缓慢打开活塞（向右滑动下方滑块），调节界面高度至4~6 cm。","⑥ 关闭活塞，记录界面高度。装管完成。"];
             stepDesc.innerText = descriptions[currentStep];
-            if (currentStep === 4) pistonSliderBox.style.display = 'block';
-            else pistonSliderBox.style.display = 'none';
-            if (currentStep === 2 && baseSolPx === 0) { baseSolPx = 60; updateTubeHeights(baseSolPx); }
-            if (currentStep === 4) {
-                let maxRise = (MAX_HEIGHT_PX - baseSolPx) * 0.9;
-                let extra = (pistonOpen / 100) * maxRise;
-                updateTubeHeights(baseSolPx + extra);
-            }
-            if (currentStep === 5) saveInstalledHeight();
-            prevBtn.disabled = (currentStep === 0);
-            nextBtn.disabled = (currentStep === 5);
+            if(currentStep===4) pistonSliderBox.style.display='block'; else pistonSliderBox.style.display='none';
+            if(currentStep===2 && baseSolPx===0) { baseSolPx = 60; updateTubeHeights(baseSolPx); }
+            if(currentStep===4) { let maxRise = (MAX_HEIGHT_PX - baseSolPx) * 0.9; let extra = (pistonOpen/100)*maxRise; updateTubeHeights(baseSolPx + extra); }
+            if(currentStep===5) saveInstalledHeight();
+            prevBtn.disabled=(currentStep===0); nextBtn.disabled=(currentStep===5);
         }
-        
-        function onPistonChange() {
-            if (currentStep !== 4) return;
-            let val = parseInt(pistonSlider.value);
-            pistonOpen = val;
-            pistonValue.innerText = val + '%';
-            let maxRise = (MAX_HEIGHT_PX - baseSolPx) * 0.9;
-            updateTubeHeights(baseSolPx + (val / 100) * maxRise);
-        }
-        
-        function nextStep() {
-            if (currentStep < 5) {
-                if (currentStep === 4) {
-                    let curHeightCm = parseFloat(heightDisplay.innerText);
-                    if (curHeightCm < 3 || curHeightCm > 7) {
-                        if (!confirm(`当前界面高度 ${curHeightCm.toFixed(1)} cm，理想范围4~6 cm。是否继续？`)) return;
-                    }
-                }
-                currentStep++;
-                updateStepUI();
-            }
-        }
-        function prevStep() { if (currentStep > 0) { currentStep--; updateStepUI(); } }
-        function resetAll() {
-            currentStep = 0; pistonOpen = 0; baseSolPx = 0;
-            pistonSlider.value = 0; pistonValue.innerText = '0%';
-            updateTubeHeights(0); updateStepUI();
-            window.sharedState.installedSolHeightPx = 60;
-            if (document.getElementById('electrophoresisOpModule').classList.contains('active-module') && window.elecOpResetInterface) window.elecOpResetInterface();
-        }
-        prevBtn.addEventListener('click', prevStep);
-        nextBtn.addEventListener('click', nextStep);
-        resetBtn.addEventListener('click', resetAll);
-        pistonSlider.addEventListener('input', onPistonChange);
-        stepDivs.forEach((div, idx) => {
-            div.addEventListener('click', () => {
-                if (idx === currentStep) return;
-                if (idx < currentStep) { currentStep = idx; updateStepUI(); }
-                else if (idx === currentStep + 1) nextStep();
-                else alert("请按顺序逐步操作");
-            });
-        });
+        function onPistonChange() { if(currentStep!==4) return; let val = parseInt(pistonSlider.value); pistonOpen=val; pistonValue.innerText=val+'%'; let maxRise = (MAX_HEIGHT_PX - baseSolPx)*0.9; updateTubeHeights(baseSolPx + (val/100)*maxRise); }
+        function nextStep(){ if(currentStep<5){ if(currentStep===4){ let curHeightCm=parseFloat(heightDisplay.innerText); if(curHeightCm<3||curHeightCm>7){ if(!confirm(`当前界面高度 ${curHeightCm.toFixed(1)} cm，理想范围4~6 cm。是否继续？`)) return; } } currentStep++; updateStepUI(); } }
+        function prevStep(){ if(currentStep>0){ currentStep--; updateStepUI(); } }
+        function resetAll(){ currentStep=0; pistonOpen=0; baseSolPx=0; pistonSlider.value=0; pistonValue.innerText='0%'; updateTubeHeights(0); updateStepUI(); window.sharedState.installedSolHeightPx=60; if(window.elecOpResetInterface) window.elecOpResetInterface(); }
+        prevBtn.addEventListener('click',prevStep); nextBtn.addEventListener('click',nextStep); resetBtn.addEventListener('click',resetAll); pistonSlider.addEventListener('input',onPistonChange);
+        stepDivs.forEach((div,idx)=>{ div.addEventListener('click',()=>{ if(idx===currentStep) return; if(idx<currentStep){ currentStep=idx; updateStepUI(); } else if(idx===currentStep+1) nextStep(); else alert("请按顺序逐步操作"); }); });
         resetAll();
     })();
 
-    // ================= 模块5: 电泳操作 (读取装管高度) =================
+    // ================= 模块5: 电泳操作 =================
     (function initElectrophoresisOp() {
         const ETA = 0.01005, D = 81.0, K = 4, SQUARE300 = 90000, PI = Math.PI, REF_ZETA = 0.052;
         const TOTAL_PX = 300, CM_PER_PX = 10 / TOTAL_PX, MM_PER_PX = CM_PER_PX * 10;
         let initialSolPx = 60, currentSolPx = 60;
         let isElectrophoresis = false, timerInterval = null, elapsedSeconds = 0;
-        
         const voltageNum = document.getElementById('elecOp-voltageNum');
         const voltageSlider = document.getElementById('elecOp-voltageSlider');
         const voltageShow = document.getElementById('elecOp-voltageShow');
@@ -1283,7 +508,6 @@
         const leftAux = document.getElementById('elecOp-leftAux');
         const rightSol = document.getElementById('elecOp-rightSol');
         const rightAux = document.getElementById('elecOp-rightAux');
-        
         function updateTubeVisual(solPx) {
             solPx = Math.min(TOTAL_PX, Math.max(0, solPx));
             let auxPx = TOTAL_PX - solPx;
@@ -1296,27 +520,15 @@
             liveDistanceSpan.innerText = deltaMM.toFixed(2);
             return deltaMM;
         }
-        
-        function computeTheoreticalMoveMM(voltageV, distanceCm, timeSec) {
-            if (voltageV <= 0 || distanceCm <= 0 || timeSec <= 0) return 0;
-            let u = (REF_ZETA * D * voltageV) / (K * PI * ETA * distanceCm * SQUARE300);
-            return u * timeSec * 10;
-        }
-        function computeZetaFromDistance(d_mm, voltageV, distanceCm, timeSec) {
-            if (timeSec <= 0 || voltageV <= 0 || distanceCm <= 0) return 0;
-            let u = (d_mm / 10) / timeSec;
-            return (K * PI * ETA * distanceCm * u * SQUARE300) / (D * voltageV);
-        }
-        
-        function syncVoltage() { let v = Math.min(150, Math.max(0, parseFloat(voltageNum.value)||50)); voltageNum.value=v; voltageSlider.value=v; voltageShow.innerText=v+' V'; if(isElectrophoresis && elapsedSeconds>0) updateLiveMovement(); }
-        function syncDistance() { let d = Math.min(70, Math.max(20, parseFloat(distanceNum.value)||40)); distanceNum.value=d; distanceSlider.value=d; distanceShow.innerText=d.toFixed(1)+' cm'; if(isElectrophoresis && elapsedSeconds>0) updateLiveMovement(); }
-        
+        function computeZetaFromDistance(d_mm, voltageV, distanceCm, timeSec) { if(timeSec<=0||voltageV<=0||distanceCm<=0) return 0; let u = (d_mm/10)/timeSec; return (K*PI*ETA*distanceCm*u*SQUARE300)/(D*voltageV); }
+        function syncVoltage() { let v=Math.min(150,Math.max(0,parseFloat(voltageNum.value)||50)); voltageNum.value=v; voltageSlider.value=v; voltageShow.innerText=v+' V'; if(isElectrophoresis && elapsedSeconds>0) updateLiveMovement(); }
+        function syncDistance() { let d=Math.min(70,Math.max(20,parseFloat(distanceNum.value)||40)); distanceNum.value=d; distanceSlider.value=d; distanceShow.innerText=d.toFixed(1)+' cm'; if(isElectrophoresis && elapsedSeconds>0) updateLiveMovement(); }
         function updateLiveMovement() {
-            if (!isElectrophoresis) return;
+            if(!isElectrophoresis) return;
             let voltage = parseFloat(voltageNum.value);
             let distance = parseFloat(distanceNum.value);
-            if (voltage <= 0 || distance <= 0) return;
-            let theoreticalMM = computeTheoreticalMoveMM(voltage, distance, elapsedSeconds);
+            if(voltage<=0||distance<=0) return;
+            let theoreticalMM = (REF_ZETA * D * voltage) / (K * PI * ETA * distance * SQUARE300) * elapsedSeconds * 10;
             let maxRiseMM = (TOTAL_PX - initialSolPx) * MM_PER_PX;
             let riseMM = Math.min(theoreticalMM, maxRiseMM);
             let newSolPx = initialSolPx + (riseMM / MM_PER_PX);
@@ -1324,72 +536,19 @@
             updateTubeVisual(newSolPx);
             let actualMM = (currentSolPx - initialSolPx) * MM_PER_PX;
             let u = (actualMM / 10) / elapsedSeconds;
-            if (elapsedSeconds > 0 && !isNaN(u)) {
-                speedValSpan.innerText = u.toExponential(3);
-                let zeta = computeZetaFromDistance(actualMM, voltage, distance, elapsedSeconds);
-                zetaValSpan.innerText = zeta.toFixed(4);
-            }
+            if(elapsedSeconds>0 && !isNaN(u)) { speedValSpan.innerText = u.toExponential(3); let zeta = computeZetaFromDistance(actualMM, voltage, distance, elapsedSeconds); zetaValSpan.innerText = zeta.toFixed(4); }
         }
-        
-        function startTimer() { if(timerInterval) clearInterval(timerInterval); timerInterval = setInterval(() => { if(isElectrophoresis) { elapsedSeconds++; timerDisplay.innerText = elapsedSeconds.toFixed(0); updateLiveMovement(); } }, 1000); }
-        function stopTimer() { if(timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
-        
-        function startElectrophoresis() {
-            if(isElectrophoresis) return;
-            if(parseFloat(voltageNum.value) <= 0) { alert("请设置电压 > 0 V"); return; }
-            isElectrophoresis = true;
-            startBtn.disabled = true;
-            stopBtn.disabled = false;
-            if(elapsedSeconds === 0) initialSolPx = currentSolPx;
-            startTimer();
-        }
-        function stopElectrophoresis() {
-            if(!isElectrophoresis) return;
-            isElectrophoresis = false;
-            startBtn.disabled = false;
-            stopBtn.disabled = true;
-            stopTimer();
-            updateLiveMovement();
-        }
-        
-        function resetInterface() {
-            if(isElectrophoresis) stopElectrophoresis();
-            elapsedSeconds = 0;
-            timerDisplay.innerText = "0.0";
-            initialSolPx = window.sharedState.installedSolHeightPx || 60;
-            initialSolPx = Math.min(TOTAL_PX, Math.max(0, initialSolPx));
-            currentSolPx = initialSolPx;
-            updateTubeVisual(initialSolPx);
-            speedValSpan.innerText = "0.0000";
-            zetaValSpan.innerText = "0.0000";
-            liveDistanceSpan.innerText = "0.00";
-        }
-        
-        function recordAndCalculate() {
-            if(elapsedSeconds <= 0) { alert("请先开始电泳并运行一段时间后再记录。"); return; }
-            let voltage = parseFloat(voltageNum.value);
-            let distance = parseFloat(distanceNum.value);
-            let currentMM = (currentSolPx - initialSolPx) * MM_PER_PX;
-            if(currentMM < 0.01 && elapsedSeconds > 2 && voltage <= 0) { alert("电压为0，胶粒不移动。请调高电压。"); return; }
-            let u = (currentMM / 10) / elapsedSeconds;
-            speedValSpan.innerText = u.toExponential(4);
-            let zeta = computeZetaFromDistance(currentMM, voltage, distance, elapsedSeconds);
-            zetaValSpan.innerText = zeta.toFixed(5);
-            alert(`记录成功！\n移动距离: ${currentMM.toFixed(2)} mm\n时间: ${elapsedSeconds} s\n电泳速度: ${u.toExponential(3)} cm/s\nζ电位: ${zeta.toFixed(4)} V`);
-        }
-        
-        voltageNum.addEventListener('input', syncVoltage);
-        voltageSlider.addEventListener('input', () => { voltageNum.value = voltageSlider.value; syncVoltage(); });
-        distanceNum.addEventListener('input', syncDistance);
-        distanceSlider.addEventListener('input', () => { distanceNum.value = distanceSlider.value; syncDistance(); });
-        startBtn.addEventListener('click', startElectrophoresis);
-        stopBtn.addEventListener('click', stopElectrophoresis);
-        resetInterfaceBtn.addEventListener('click', resetInterface);
-        recordBtn.addEventListener('click', recordAndCalculate);
+        function startTimer() { if(timerInterval) clearInterval(timerInterval); timerInterval = setInterval(()=>{ if(isElectrophoresis){ elapsedSeconds++; timerDisplay.innerText = elapsedSeconds.toFixed(0); updateLiveMovement(); } },1000); }
+        function stopTimer() { if(timerInterval){ clearInterval(timerInterval); timerInterval=null; } }
+        function startElectrophoresis() { if(isElectrophoresis) return; if(parseFloat(voltageNum.value)<=0){ alert("请设置电压 > 0 V"); return; } isElectrophoresis=true; startBtn.disabled=true; stopBtn.disabled=false; if(elapsedSeconds===0) initialSolPx = currentSolPx; startTimer(); }
+        function stopElectrophoresis() { if(!isElectrophoresis) return; isElectrophoresis=false; startBtn.disabled=false; stopBtn.disabled=true; stopTimer(); updateLiveMovement(); }
+        function resetInterface() { if(isElectrophoresis) stopElectrophoresis(); elapsedSeconds=0; timerDisplay.innerText="0.0"; initialSolPx = window.sharedState.installedSolHeightPx || 60; initialSolPx = Math.min(TOTAL_PX, Math.max(0, initialSolPx)); currentSolPx = initialSolPx; updateTubeVisual(initialSolPx); speedValSpan.innerText="0.0000"; zetaValSpan.innerText="0.0000"; liveDistanceSpan.innerText="0.00"; }
+        function recordAndCalculate() { if(elapsedSeconds<=0){ alert("请先开始电泳并运行一段时间后再记录。"); return; } let voltage=parseFloat(voltageNum.value); let distance=parseFloat(distanceNum.value); let currentMM=(currentSolPx-initialSolPx)*MM_PER_PX; if(currentMM<0.01 && elapsedSeconds>2 && voltage<=0){ alert("电压为0，胶粒不移动。请调高电压。"); return; } let u=(currentMM/10)/elapsedSeconds; speedValSpan.innerText=u.toExponential(4); let zeta=computeZetaFromDistance(currentMM,voltage,distance,elapsedSeconds); zetaValSpan.innerText=zeta.toFixed(5); alert(`记录成功！\n移动距离: ${currentMM.toFixed(2)} mm\n时间: ${elapsedSeconds} s\n电泳速度: ${u.toExponential(3)} cm/s\nζ电位: ${zeta.toFixed(4)} V`); }
+        voltageNum.addEventListener('input',syncVoltage); voltageSlider.addEventListener('input',()=>{ voltageNum.value=voltageSlider.value; syncVoltage(); });
+        distanceNum.addEventListener('input',syncDistance); distanceSlider.addEventListener('input',()=>{ distanceNum.value=distanceSlider.value; syncDistance(); });
+        startBtn.addEventListener('click',startElectrophoresis); stopBtn.addEventListener('click',stopElectrophoresis); resetInterfaceBtn.addEventListener('click',resetInterface); recordBtn.addEventListener('click',recordAndCalculate);
         window.elecOpResetInterface = resetInterface;
-        syncVoltage();
-        syncDistance();
-        resetInterface();
+        syncVoltage(); syncDistance(); resetInterface();
     })();
 
     // ================= 导航切换 =================
@@ -1402,20 +561,12 @@
         elecOp: document.getElementById('electrophoresisOpModule')
     };
     function switchModule(activeId) {
-        Object.values(modules).forEach(module => { if (module) module.classList.remove('active-module'); });
-        if (modules[activeId]) modules[activeId].classList.add('active-module');
-        tabBtns.forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.getAttribute('data-tab') === activeId) btn.classList.add('active');
-        });
-        if (activeId === 'elecOp' && window.elecOpResetInterface) window.elecOpResetInterface();
+        Object.values(modules).forEach(module => { if(module) module.classList.remove('active-module'); });
+        if(modules[activeId]) modules[activeId].classList.add('active-module');
+        tabBtns.forEach(btn => { btn.classList.remove('active'); if(btn.getAttribute('data-tab')===activeId) btn.classList.add('active'); });
+        if(activeId === 'elecOp' && window.elecOpResetInterface) window.elecOpResetInterface();
     }
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const tabId = btn.getAttribute('data-tab');
-            if (tabId) switchModule(tabId);
-        });
-    });
+    tabBtns.forEach(btn => { btn.addEventListener('click', (e) => { const tabId = btn.getAttribute('data-tab'); if(tabId) switchModule(tabId); }); });
     switchModule('prep');
 </script>
 </body>
